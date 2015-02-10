@@ -4,7 +4,9 @@
 from collections import OrderedDict
 from operator import itemgetter
 
+import argparse
 import string
+import sys
 
 MAX_WIDTH = 80
 SEPARATOR = ' │ '
@@ -16,7 +18,7 @@ def char_frequency(text, case_sensitive=False):
     for char in text:
         if char not in string.ascii_letters:
             continue
-        c = char if case_sensitive else string.lower(char)
+        c = char if case_sensitive else string.upper(char)
         counts[c] = counts.get(c, 0) + 1
 
     return counts
@@ -48,8 +50,8 @@ def pretty_output(data, sort_by='key', counts=True, graph=True):
 
         if counts:
             line += SEPARATOR
-            line += str(val)
             line += ' ' * (val_str_max - len(str(val))) if len(str(val)) < val_str_max else ''
+            line += str(val)
 
         if graph:
             line += SEPARATOR
@@ -59,5 +61,15 @@ def pretty_output(data, sort_by='key', counts=True, graph=True):
 
 
 if __name__ == '__main__':
-    d = char_frequency('asdlfhaasdfjasdfkljhasd;kfasdfajsdfkajdf')
-    pretty_output(d, counts=True, sort_by='val')
+    stdin = sys.stdin.read()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--graph', '-g', help='Draw ascii histogram graph', action='store_true', dest='graph', default=False)
+    parser.add_argument('--counts', '-c', help='Output the count totals', action='store_true', dest='counts', default=False)
+    parser.add_argument('--sort-by', '-s', help='Sort output by "key" or "val"', action='store', dest='sort_by', default='val')
+    parser.add_argument('--case-sensitive', help='Make counting operations case sensitive', action='store_true', dest='case_sensitive', default=False)
+
+    args = parser.parse_args()
+
+    char_counts = char_frequency(stdin, case_sensitive=args.case_sensitive)
+    pretty_output(char_counts, sort_by=args.sort_by, counts=args.counts, graph=args.graph)
