@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 from collections import OrderedDict
 from operator import itemgetter
@@ -6,8 +7,8 @@ from operator import itemgetter
 import string
 
 MAX_WIDTH = 80
-SEPARATOR = ' | '
-GRAPH_CHAR = '#'
+SEPARATOR = ' │ '
+GRAPH_CHAR = '█'
 
 def char_frequency(text, case_sensitive=False):
     counts = {}
