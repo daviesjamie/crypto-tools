@@ -23,6 +23,23 @@ def char_frequency(text, case_sensitive=False):
 
     return counts
 
+def ngram_frequency(text, n, case_sensitive=False):
+    counts = {}
+    ngram = ''
+
+    for char in text:
+        if char not in string.ascii_letters:
+            ngram = ''
+            continue
+
+        ngram += char if case_sensitive else string.upper(char)
+
+        if len(ngram) == n:
+            counts[ngram] = counts.get(ngram, 0) + 1
+            ngram = ngram[1:]
+
+    return counts
+
 def pretty_output(data, sort_by='key', counts=True, graph=True):
     if sort_by == 'key':
         data = OrderedDict(sorted(data.items(), key=itemgetter(0)))
@@ -65,11 +82,17 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--graph', '-g', help='Draw ascii histogram graph', action='store_true', dest='graph', default=False)
-    parser.add_argument('--counts', '-c', help='Output the count totals', action='store_true', dest='counts', default=False)
-    parser.add_argument('--sort-by', '-s', help='Sort output by "key" or "val"', action='store', dest='sort_by', default='val')
+    parser.add_argument('--count', '-c', help='Output the count totals', action='store_true', dest='counts', default=False)
+    parser.add_argument('--sort-by', '-s', help='Sort output by "key" or "val"', action='store', dest='sort_by', default='key')
     parser.add_argument('--case-sensitive', help='Make counting operations case sensitive', action='store_true', dest='case_sensitive', default=False)
+    parser.add_argument('--ngram', '-n', help='Count ngrams of specified length instead of letters', action='store', dest='ngram', default=None, type=int)
 
     args = parser.parse_args()
 
-    char_counts = char_frequency(stdin, case_sensitive=args.case_sensitive)
+    if args.ngram:
+        char_counts = ngram_frequency(stdin, args.ngram, case_sensitive=args.case_sensitive)
+    else:
+        char_counts = char_frequency(stdin, case_sensitive=args.case_sensitive)
+
     pretty_output(char_counts, sort_by=args.sort_by, counts=args.counts, graph=args.graph)
+
