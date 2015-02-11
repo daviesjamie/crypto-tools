@@ -12,6 +12,7 @@ MAX_WIDTH = 80
 SEPARATOR = ' │ '
 GRAPH_CHAR = '█'
 
+
 def char_frequency(text, case_sensitive=False):
     counts = {}
 
@@ -22,6 +23,7 @@ def char_frequency(text, case_sensitive=False):
         counts[c] = counts.get(c, 0) + 1
 
     return counts
+
 
 def ngram_frequency(text, n, case_sensitive=False):
     counts = {}
@@ -39,6 +41,23 @@ def ngram_frequency(text, n, case_sensitive=False):
             ngram = ngram[1:]
 
     return counts
+
+
+def word_frequency(text, min_length=1, case_sensitive=False):
+    counts = {}
+    word = ''
+
+    for char in text:
+        if char not in string.ascii_letters:
+            if len(word) >= min_length:
+                counts[word] = counts.get(word, 0) + 1
+            word = ''
+            continue
+
+        word += char if case_sensitive else string.upper(char)
+
+    return counts
+
 
 def pretty_output(data, sort_by='key', counts=True, graph=True):
     if sort_by == 'key':
@@ -85,12 +104,15 @@ if __name__ == '__main__':
     parser.add_argument('--count', '-c', help='Output the count totals', action='store_true', dest='counts', default=False)
     parser.add_argument('--sort-by', '-s', help='Sort output by "key" or "val"', action='store', dest='sort_by', default='key')
     parser.add_argument('--case-sensitive', help='Make counting operations case sensitive', action='store_true', dest='case_sensitive', default=False)
-    parser.add_argument('--ngram', '-n', help='Count ngrams of specified length instead of letters', action='store', dest='ngram', default=None, type=int)
+    parser.add_argument('--ngram', '-n', help='Count ngrams of specified length', action='store', dest='ngram', default=None, type=int)
+    parser.add_argument('--word', '-w', help='Count words of specified minimum length', action='store', dest='word', default=None, type=int)
 
     args = parser.parse_args()
 
     if args.ngram:
         char_counts = ngram_frequency(stdin, args.ngram, case_sensitive=args.case_sensitive)
+    elif args.word:
+        char_counts = word_frequency(stdin, min_length=args.word, case_sensitive=args.case_sensitive)
     else:
         char_counts = char_frequency(stdin, case_sensitive=args.case_sensitive)
 
