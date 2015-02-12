@@ -1,6 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+In polyalphabetic substitution ciphers where the substitution alphabets are chosen by the use of a
+keyword (such as the Vigenère cipher), the Kasiski test allows a cryptanalyst to deduce the length
+of the keyword. It involves looking for repeated segments of characters, calculating the distances
+between them, and then deducing the key length from the greatest common divisor of these distances.
+
+This is a tool for performing the Kasisky test, with options for manually specifying a segment of
+text or automatically finding one. It can also calculate the greatest common divisor of the
+distances found.
+"""
+
 from fractions import gcd
 from frequency import word_frequency
 from operator import itemgetter
@@ -12,6 +23,7 @@ import sys
 
 
 def get_all_indices(segment, text, case_sensitive=False):
+    """Gets all the index of all occurences of a segment in a given text."""
     clean_text = ''
     for char in text:
         if char in string.ascii_letters:
@@ -21,6 +33,7 @@ def get_all_indices(segment, text, case_sensitive=False):
 
 
 def get_distances_between(segment, text):
+    """Gets the distances between all occurences of a segment in a given text."""
     indices = get_all_indices(segment, text)
     distances = []
 

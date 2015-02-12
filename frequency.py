@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+Frequency analysis is based on the fact that, in any given piece of written language, certain
+letters and combinations of letters occur with varying frequencies.
+
+This is a tool to allow for counting of the frequencies of single characters, ngrams
+(combinations of n letters) and whole words in a piece of input text.
+"""
+
 from collections import OrderedDict
 from operator import itemgetter
 
@@ -14,6 +22,7 @@ GRAPH_CHAR = '█'
 
 
 def char_frequency(text, case_sensitive=False):
+    """Counts the frequency of individual characters in a piece of text."""
     counts = {}
 
     for char in text:
@@ -26,6 +35,7 @@ def char_frequency(text, case_sensitive=False):
 
 
 def ngram_frequency(text, n, case_sensitive=False):
+    """Counts the frequency of character combinations of length n in a piece of text."""
     counts = {}
     ngram = ''
 
@@ -44,6 +54,7 @@ def ngram_frequency(text, n, case_sensitive=False):
 
 
 def word_frequency(text, min_length=1, case_sensitive=False):
+    """Counts the frequency of whole words (with an optional minimum length) in a piece of text."""
     counts = {}
     word = ''
 
@@ -60,6 +71,7 @@ def word_frequency(text, min_length=1, case_sensitive=False):
 
 
 def pretty_output(data, sort_by='key', counts=True, graph=True):
+    """Outputs a frequency count in a pretty manner, with an optional ascii graph."""
     if sort_by == 'key':
         data = OrderedDict(sorted(data.items(), key=itemgetter(0)))
     elif sort_by == 'val':
