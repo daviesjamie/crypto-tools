@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from fractions import gcd
+from frequency import word_frequency
+from operator import itemgetter
 
 import argparse
 import re
@@ -9,11 +11,11 @@ import string
 import sys
 
 
-def get_all_indices(segment, text):
+def get_all_indices(segment, text, case_sensitive=False):
     clean_text = ''
     for char in text:
         if char in string.ascii_letters:
-            clean_text += char
+            clean_text += char if case_sensitive else string.upper(char)
 
     return [m.start() for m in re.finditer(segment, clean_text)]
 
@@ -35,8 +37,26 @@ if __name__ == '__main__':
     parser.add_argument('segment', help='The segment to search for', action='store')
     parser.add_argument('--gcd', '-g', help='Calculate the greatest common divisor (an estimate for the key length)', action='store_true', dest='gcd', default=False)
 
+    parser.add_argument('--auto', '-a', help='Automatically find a suitable repeated segment',
+                        action='store_true', dest='auto', default=False)
+
+    parser.add_argument('--auto-min-length', '-l',
+                        help='Minimum length of repeated segment to find', action='store',
+                        dest='min_length', default=3, type=int)
+
+    parser.add_argument('--case-sensitive', help='Make counting operations case sensitive',
+                        action='store_true', dest='case_sensitive', default=False)
+
     args = parser.parse_args()
-    distances = get_distances_between(args.segment, stdin)
+
+    if args.segment:
+        segment = args.segment
+    else:
+        segment = max(word_frequency(stdin, min_length=args.min_length, case_sensitive=args.case_sensitive).iteritems(), key=itemgetter(1))[0]
+
+    print 'Using segment "{}"'.format(segment)
+
+    distances = get_distances_between(segment, stdin)
 
     print '\n'.join(str(x) for x in distances)
 
