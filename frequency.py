@@ -100,12 +100,24 @@ if __name__ == '__main__':
     stdin = sys.stdin.read()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--graph', '-g', help='Draw ascii histogram graph', action='store_true', dest='graph', default=False)
-    parser.add_argument('--count', '-c', help='Output the count totals', action='store_true', dest='counts', default=False)
-    parser.add_argument('--sort-by', '-s', help='Sort output by "key" or "val"', action='store', dest='sort_by', default='key')
-    parser.add_argument('--case-sensitive', help='Make counting operations case sensitive', action='store_true', dest='case_sensitive', default=False)
-    parser.add_argument('--ngram', '-n', help='Count ngrams of specified length', action='store', dest='ngram', default=None, type=int)
-    parser.add_argument('--word', '-w', help='Count words of specified minimum length', action='store', dest='word', default=None, type=int)
+
+    parser.add_argument('--case-sensitive', help='Ignore case in input text', action='store_true',
+                        dest='case_sensitive', default=False)
+
+    parser.add_argument('--count', '-c', help='Output the count totals', action='store_true',
+                        dest='counts', default=False)
+
+    parser.add_argument('--graph', '-g', help='Draw ascii histogram graph', action='store_true',
+                        dest='graph', default=False)
+
+    parser.add_argument('--ngram', '-n', help='Count ngrams of specified length', action='store',
+                        dest='ngram', default=None, type=int)
+
+    parser.add_argument('--sort-by', '-s', help='Sort output by "key" or "val"', action='store',
+                        dest='sort_by', default='key')
+
+    parser.add_argument('--word', '-w', help='Count words of specified minimum length',
+                        action='store', dest='word', default=None, type=int)
 
     args = parser.parse_args()
 

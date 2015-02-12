@@ -34,8 +34,6 @@ if __name__ == '__main__':
     stdin = sys.stdin.read()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('segment', help='The segment to search for', action='store')
-    parser.add_argument('--gcd', '-g', help='Calculate the greatest common divisor (an estimate for the key length)', action='store_true', dest='gcd', default=False)
 
     parser.add_argument('--auto', '-a', help='Automatically find a suitable repeated segment',
                         action='store_true', dest='auto', default=False)
@@ -44,8 +42,15 @@ if __name__ == '__main__':
                         help='Minimum length of repeated segment to find', action='store',
                         dest='min_length', default=3, type=int)
 
-    parser.add_argument('--case-sensitive', help='Make counting operations case sensitive',
-                        action='store_true', dest='case_sensitive', default=False)
+    parser.add_argument('--case-sensitive', help='Ignore case in input text', action='store_true',
+                        dest='case_sensitive', default=False)
+
+    parser.add_argument('--gcd', '-g',
+                        help='Calculate the greatest common divisor (an estimate for the key length)',
+                        action='store_true', dest='gcd', default=False)
+
+    parser.add_argument('--segment', '-s', help='The repeated segment to search for',
+                        action='store', dest='segment', default=None)
 
     args = parser.parse_args()
 
