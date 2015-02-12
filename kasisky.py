@@ -31,8 +31,6 @@ def get_distances_between(segment, text):
 
 
 if __name__ == '__main__':
-    stdin = sys.stdin.read()
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--auto', '-a', help='Automatically find a suitable repeated segment',
@@ -53,6 +51,7 @@ if __name__ == '__main__':
                         action='store', dest='segment', default=None)
 
     args = parser.parse_args()
+    stdin = sys.stdin.read()
 
     if args.segment:
         segment = args.segment
@@ -62,7 +61,6 @@ if __name__ == '__main__':
     print 'Using segment "{}"'.format(segment)
 
     distances = get_distances_between(segment, stdin)
-
     print '\n'.join(str(x) for x in distances)
 
     if args.gcd:

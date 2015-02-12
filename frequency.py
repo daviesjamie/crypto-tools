@@ -97,8 +97,6 @@ def pretty_output(data, sort_by='key', counts=True, graph=True):
 
 
 if __name__ == '__main__':
-    stdin = sys.stdin.read()
-
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--case-sensitive', help='Ignore case in input text', action='store_true',
@@ -120,6 +118,7 @@ if __name__ == '__main__':
                         action='store', dest='word', default=None, type=int)
 
     args = parser.parse_args()
+    stdin = sys.stdin.read()
 
     if args.ngram:
         char_counts = ngram_frequency(stdin, args.ngram, case_sensitive=args.case_sensitive)
