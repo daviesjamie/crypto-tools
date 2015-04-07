@@ -38,7 +38,7 @@ def get_distances_between(segment, text):
     distances = []
 
     for i in range(1, len(indices)):
-        distances.append(indices[i] - (indices[i-1] + len(segment)))
+        distances.append(indices[i] - indices[i-1])
 
     return distances
 
